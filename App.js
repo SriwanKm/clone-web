@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
     TouchableHighlight,
     TouchableOpacity,
@@ -8,15 +8,34 @@ import {
     Text,
     View,
     FlatList,
+    Dimensions,
 } from 'react-native';
 import {LinearGradient} from 'expo-linear-gradient';
 import * as ScreenOrientation from 'expo-screen-orientation';
 
 
 const image = {uri: "https://www.html.am/templates/downloads/bryantsmith/barrensavannah/mainImage.jpg"};
-
+const window = Dimensions.get('window');
+const screen = Dimensions.get('screen');
 
 export default function App() {
+    const [dimensions, setDimensions] = useState({window, screen});
+    const [orientation, setOrientation] = useState('')
+    const onChange = ({window, screen}) => {
+        setDimensions({window, screen});
+    };
+
+    useEffect(() => {
+        Dimensions.addEventListener('change', onChange);
+        return () => {
+            Dimensions.removeEventListener('change', onChange);
+        };
+    });
+
+    const isPortrait = () => {
+        return dimensions.screen.height > dimensions.screen.width
+    }
+
     const [navMenu, setNav] = useState([
         {key: 'Home', id: 1, isPressed: false},
         {key: 'About', id: 2, isPressed: false},
@@ -50,6 +69,7 @@ export default function App() {
 
     return (
         <ScrollView>
+
             <LinearGradient colors={['#a63702', '#eb8600']} style={styles.navContainer}>
                 <FlatList
                     horizontal={true}
@@ -68,23 +88,31 @@ export default function App() {
                     )}
                 />
             </LinearGradient>
-            <View style={styles.line}></View>
+            {/*<View style={styles.container}>*/}
+            {/*    <Text>{`Window Dimensions: height - ${dimensions.window.height}, width - ${dimensions.window.width}`}</Text>*/}
+            {/*    <Text>{`Screen Dimensions: height - ${dimensions.screen.height}, width - ${dimensions.screen.width}`}</Text>*/}
+            {/*    <Text>{`P: ${isPortrait()}`}</Text>*/}
+            {/*</View>*/}
+            <View style={styles.line}/>
             <LinearGradient colors={['#eb8600', '#4f2108', '#26070a']} style={styles.sectionCon}>
 
-                <ImageBackground source={image} style={styles.img}>
+                <ImageBackground source={image} style={isPortrait() ? styles.imgP: styles.img}>
                     <Text style={styles.header}>Barren Savannah</Text>
                     <Text style={styles.subHeader}>An XHTML 1.0 Strict Template by Bryant Smith</Text>
                 </ImageBackground>
 
-                <LinearGradient colors={['#fed5ac', '#ffffff', '#ffffff', '#ffffff']} style={styles.section}>
+                <LinearGradient
+                    colors={isPortrait() ? ['#fed5ac', '#eb8600'] : ['#fed5ac', '#ffffff', '#ffffff', '#ffffff']}
+                    style={isPortrait() ? styles.sectionP : styles.section}>
                     <View style={styles.subSection}>
                         <Text style={styles.sectionHeader}>The Title of an Article</Text>
                         <Text style={styles.p}>
                             You may use this template on any site, anywhere, for free just please leave the link back to
                             me
                             in the footer. This template validates XHTML Strict 1.0, CSS Validates as well; enjoy :)
-                            This is
-                            what a link looks like.
+                            <TouchableOpacity>
+                                <Text style={styles.link}>This is what a link looks like.</Text>
+                            </TouchableOpacity>
                         </Text>
 
                         <Text style={styles.p}>
@@ -95,7 +123,7 @@ export default function App() {
                             risus
                             ut felis. Sed vehicula pellentesque quam.
                         </Text>
-                        <View style={styles.dottedBox}>
+                        <View style={isPortrait() ? styles.dottedBoxP : styles.dottedBox}>
                             <Text style={styles.p}>
                                 This is a block quote, use it to include quotes from yourself or others. All you have to
                                 do to include this element is wrap some text around blockquote tags
@@ -212,6 +240,13 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         paddingBottom: 360,
     },
+    imgP: {
+        borderColor: '#000000',
+        borderWidth: 9,
+        borderTopWidth: 0,
+        marginBottom: 20,
+        paddingBottom: 360,
+    },
     header: {
         color: '#ffffff',
         fontWeight: 'bold',
@@ -230,6 +265,11 @@ const styles = StyleSheet.create({
         borderTopWidth: 12,
     },
     sectionCon: {},
+    link: {
+        color: '#ca740d',
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
     dottedBox: {
         borderColor: '#c97003',
         borderWidth: 1,
@@ -238,10 +278,21 @@ const styles = StyleSheet.create({
         borderStyle: 'dashed',
         width: '70%',
     },
+    dottedBoxP: {
+        borderColor: '#000000',
+        borderWidth: 1,
+        marginHorizontal: 5,
+        marginVertical: 20,
+        padding: 15,
+        borderStyle: 'dashed',
+    },
     section: {
         borderColor: '#000000',
         borderWidth: 9,
         margin: 20,
+        paddingHorizontal: 10,
+    },
+    sectionP: {
         paddingHorizontal: 10,
     },
     subSection: {
@@ -255,5 +306,6 @@ const styles = StyleSheet.create({
     p: {
         fontSize: 16,
         marginVertical: 10,
+        lineHeight: 25,
     },
 });
