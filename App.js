@@ -11,7 +11,6 @@ import {
     Dimensions,
 } from 'react-native';
 import {LinearGradient} from 'expo-linear-gradient';
-import * as ScreenOrientation from 'expo-screen-orientation';
 
 
 const image = {uri: "https://www.html.am/templates/downloads/bryantsmith/barrensavannah/mainImage.jpg"};
@@ -20,7 +19,6 @@ const screen = Dimensions.get('screen');
 
 export default function App() {
     const [dimensions, setDimensions] = useState({window, screen});
-    const [orientation, setOrientation] = useState('')
     const onChange = ({window, screen}) => {
         setDimensions({window, screen});
     };
@@ -44,32 +42,31 @@ export default function App() {
         {key: 'Contact', id: 5, isPressed: false},
     ])
 
-    const pressIn = (id) => {
-        setNav({
-            navMenu: navMenu.map(el => {
-                if (el.id === id) {
-                    navMenu.isPressed = true;
-                }
-                console.log(navMenu)
-                return navMenu;
-            })
-        })
-    };
-
-    const pressOut = (id) => {
-        setNav({
-            navMenu: navMenu.map(el => {
-                if (el.id === id) {
-                    navMenu.isPressed = false;
-                }
-                return navMenu;
-            })
-        })
-    };
+    // const pressIn = (id) => {
+    //     setNav({
+    //         navMenu: navMenu.map(el => {
+    //             if (el.id === id) {
+    //                 navMenu.isPressed = true;
+    //             }
+    //             console.log(navMenu)
+    //             return navMenu;
+    //         })
+    //     })
+    // };
+    //
+    // const pressOut = (id) => {
+    //     setNav({
+    //         navMenu: navMenu.map(el => {
+    //             if (el.id === id) {
+    //                 navMenu.isPressed = false;
+    //             }
+    //             return navMenu;
+    //         })
+    //     })
+    // };
 
     return (
         <ScrollView>
-
             <LinearGradient colors={['#a63702', '#eb8600']} style={styles.navContainer}>
                 <FlatList
                     horizontal={true}
@@ -79,20 +76,14 @@ export default function App() {
                     data={navMenu}
                     renderItem={({item}) => (
                         <View style={styles.navItem}>
-                            <TouchableHighlight underlayColor="#000000" onPressIn={() => pressIn(item.id)}
-                                                onPressOut={() => pressOut(item.id)}>
-                                <Text
-                                    style={item.isPressed ? styles.navTextDark : styles.navTextLight}>{item.key}</Text>
+                            <TouchableHighlight underlayColor="#000000">
+                                <Text style={styles.navText}>{item.key}</Text>
                             </TouchableHighlight>
+                            <View style={styles.dashed}/>
                         </View>
                     )}
                 />
             </LinearGradient>
-            {/*<View style={styles.container}>*/}
-            {/*    <Text>{`Window Dimensions: height - ${dimensions.window.height}, width - ${dimensions.window.width}`}</Text>*/}
-            {/*    <Text>{`Screen Dimensions: height - ${dimensions.screen.height}, width - ${dimensions.screen.width}`}</Text>*/}
-            {/*    <Text>{`P: ${isPortrait()}`}</Text>*/}
-            {/*</View>*/}
             <View style={styles.line}/>
             <LinearGradient colors={['#eb8600', '#4f2108', '#26070a']} style={styles.sectionCon}>
 
@@ -215,22 +206,19 @@ const styles = StyleSheet.create({
         paddingBottom: 25,
 
     },
-    navTextLight: {
+    navText: {
         flex: 1,
-        paddingHorizontal: 35,
         color: '#000000',
-        paddingVertical: 18,
         fontSize: 16,
         fontWeight: 'bold',
+        marginHorizontal: 35,
 
     },
-    navTextDark: {
-        flex: 1,
-        paddingHorizontal: 35,
-        color: '#ffffff',
-        paddingVertical: 18,
-        fontSize: 16,
-        fontWeight: 'bold',
+    dashed: {
+        borderWidth: 1,
+        borderStyle: 'dashed',
+        borderColor: '#000000',
+        marginHorizontal: 35,
     },
     img: {
         borderColor: '#000000',
