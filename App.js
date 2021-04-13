@@ -34,6 +34,10 @@ export default function App() {
         return dimensions.screen.height > dimensions.screen.width
     }
 
+    const pressed = () => {
+        console.log("I'm pressed")
+    }
+
     const [navMenu, setNav] = useState([
         {key: 'Home', id: 1, isPressed: false},
         {key: 'About', id: 2, isPressed: false},
@@ -42,44 +46,26 @@ export default function App() {
         {key: 'Contact', id: 5, isPressed: false},
     ])
 
-    // const pressIn = (id) => {
-    //     setNav({
-    //         navMenu: navMenu.map(el => {
-    //             if (el.id === id) {
-    //                 navMenu.isPressed = true;
-    //             }
-    //             console.log(navMenu)
-    //             return navMenu;
-    //         })
-    //     })
-    // };
-    //
-    // const pressOut = (id) => {
-    //     setNav({
-    //         navMenu: navMenu.map(el => {
-    //             if (el.id === id) {
-    //                 navMenu.isPressed = false;
-    //             }
-    //             return navMenu;
-    //         })
-    //     })
-    // };
-
     return (
         <ScrollView>
             <LinearGradient colors={['#a63702', '#eb8600']} style={styles.navContainer}>
                 <FlatList
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
-                    keyExtractor={navMenu.id}
                     style={{flex: 1}}
-                    data={navMenu}
+                    data={[
+                        {key: 'Home'},
+                        {key: 'About'},
+                        {key: 'Portfolio'},
+                        {key: 'Services'},
+                        {key: 'Contact'},
+                    ]}
                     renderItem={({item}) => (
                         <View style={styles.navItem}>
-                            <TouchableHighlight underlayColor="#000000">
+                            <TouchableHighlight underlayColor="#000000" onPress={pressed}>
                                 <Text style={styles.navText}>{item.key}</Text>
                             </TouchableHighlight>
-                            <View style={styles.dashed}/>
+                            <View style={styles.dashed}></View>
                         </View>
                     )}
                 />
@@ -87,7 +73,7 @@ export default function App() {
             <View style={styles.line}/>
             <LinearGradient colors={['#eb8600', '#4f2108', '#26070a']} style={styles.sectionCon}>
 
-                <ImageBackground source={image} style={isPortrait() ? styles.imgP: styles.img}>
+                <ImageBackground source={image} style={isPortrait() ? styles.imgP : styles.img}>
                     <Text style={styles.header}>Barren Savannah</Text>
                     <Text style={styles.subHeader}>An XHTML 1.0 Strict Template by Bryant Smith</Text>
                 </ImageBackground>
@@ -208,17 +194,21 @@ const styles = StyleSheet.create({
     },
     navText: {
         flex: 1,
-        color: '#000000',
+        color: '#923a1f',
         fontSize: 16,
         fontWeight: 'bold',
-        marginHorizontal: 35,
+        paddingHorizontal: 10,
+        paddingTop: 10,
 
+    },
+    navItem: {
+        marginHorizontal: 30,
     },
     dashed: {
         borderWidth: 1,
         borderStyle: 'dashed',
-        borderColor: '#000000',
-        marginHorizontal: 35,
+        borderColor: '#923a1f',
+        marginHorizontal: 10,
     },
     img: {
         borderColor: '#000000',
