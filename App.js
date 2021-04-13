@@ -1,12 +1,39 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {
+  TouchableHighlight,
+  TouchableOpacity,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+} from 'react-native';
+import {LinearGradient} from 'expo-linear-gradient';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <LinearGradient colors={['#dff8fd', '#94c2cc']} style={{flex: 1}}>
+        <FlatList
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            style={{flex: 1}}
+            data={[
+              {key: 'Home'},
+              {key: 'About'},
+              {key: 'Portfolio'},
+              {key: 'Services'},
+              {key: 'Contact'},
+            ]}
+            renderItem={({item}) => (
+                <View style={styles.navItem}>
+                  <TouchableHighlight underlayColor="#94c2cc" onPress={pressed}>
+                    <Text style={styles.navText}>{item.key}</Text>
+                  </TouchableHighlight>
+                </View>
+            )}
+        />
+      </LinearGradient>
     </View>
   );
 }
