@@ -38,14 +38,6 @@ export default function App() {
         console.log("I'm pressed")
     }
 
-    const [navMenu, setNav] = useState([
-        {key: 'Home', id: 1, isPressed: false},
-        {key: 'About', id: 2, isPressed: false},
-        {key: 'Portfolio', id: 3, isPressed: false},
-        {key: 'Services', id: 4, isPressed: false},
-        {key: 'Contact', id: 5, isPressed: false},
-    ])
-
     return (
         <ScrollView>
             <LinearGradient colors={['#a63702', '#eb8600']} style={styles.navContainer}>
@@ -65,7 +57,7 @@ export default function App() {
                             <TouchableHighlight underlayColor="#000000" onPress={pressed}>
                                 <Text style={styles.navText}>{item.key}</Text>
                             </TouchableHighlight>
-                            <View style={styles.dashed}></View>
+                            <View style={styles.dashed}/>
                         </View>
                     )}
                 />
